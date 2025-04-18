@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Статистика команд VPHL</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .conference-title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .conference-section {
+      margin-bottom: 50px;
+    }
+    .league-logo {
+      height: 70px;
+      margin-right: 20px;
+    }
+    .team-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 20px;
+    }
+    .team-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      overflow: hidden;
+      width: 30%; /* Уменьшаем ширину карт для создания пространства */
+      text-align: center;
+      transition: all 0.3s ease;
+      padding: 20px;
+    }
+    .team-card:hover {
+      transform: translateY(-10px);
+    }
+    .team-logo {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .team-logo:hover {
+      transform: scale(1.1);
+    }
+    /* Стиль для статистики */
+    .team-stats {
+      display: none;
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .team-stats.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .stats-item {
+      margin-bottom: 8px;
+    }
+    .stats-item strong {
+      font-weight: bold;
+    }
+
+    .nav-pills .nav-link.active {
+      background-color: #000000;
+    }
+    .nav-link {
+      color: #000000;
+    }
+  </style>
+</head>
+<body>
+ <div class="main-container">
+    <header class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center">
+            <img src="https://i.postimg.cc/XNyR6YWb/6224a380-8bca-41dc-96b5-ce8c7ab39716.jpg"
+                 alt="Логотип лиги" class="league-logo">
+            <h1 class="h3 mb-0">Статистика команд VPHL</h1>
+        </div>
+        <nav class="nav nav-pills">
+          <a class="nav-link" href="{{ url_for('standings') }}">Таблица</a>
+          <a class="nav-link active" href="{{ url_for('statistics') }}">Статистика</a>
+          <a class="nav-link" href="{{ url_for('records') }}">Рекорды</a>
+        </nav>
+    </header>
+  <div class="container">
+    <!-- Западная конференция -->
+    <div class="conference-section">
+      <div class="conference-title">Западная конференция</div>
+      <div class="team-row">
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/207/80.png" alt="Динамо Минск" class="team-logo" onclick="toggleStats('dyn-minsk')">
+          <div class="team-stats" id="dyn-minsk">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Иван Иванов</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Алексей Петров</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Сергей Смирнов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 25</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 65%</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/719/80.png" alt="Динамо Москва" class="team-logo" onclick="toggleStats('dyn-moscow')">
+          <div class="team-stats" id="dyn-moscow">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Андрей Никитин</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Александр Белов</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Павел Козлов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 30</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 58%</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/56/80.png" alt="Северсталь" class="team-logo" onclick="toggleStats('severstal')">
+          <div class="team-stats" id="severstal">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Андрей Никитин</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Александр Белов</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Павел Козлов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 30</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 58%</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/37/80.png" alt="Металлург" class="team-logo" onclick="toggleStats('metallurg')">
+          <div class="team-stats" id="metallurg">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Дмитрий Ковалев</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Сергей Лебедев</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Александр Чернышов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 28</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 62%</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/7/80.png" alt="Спартак" class="team-logo" onclick="toggleStats('spartak')">
+          <div class="team-stats" id="spartak">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Олег Воробьев</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Виктор Орлов</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Дмитрий Куликов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 20</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 55%</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/1/80.png" alt="Локомотив" class="team-logo" onclick="toggleStats('lokomotiv')">
+          <div class="team-stats" id="lokomotiv">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Евгений Свитов</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Сергей Мищенко</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Андрей Васильев</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 35</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 59%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Восточная конференция -->
+    <div class="conference-section">
+      <div class="conference-title">Восточная конференция</div>
+      <div class="team-row">
+        <!-- Добавь команды аналогично для Восточной конференции -->
+        <!-- Пример: -->
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/34/80.png" alt="Авангард" class="team-logo" onclick="toggleStats('avangard')">
+          <div class="team-stats" id="avangard">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Алексей Калинин</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Игорь Беляев</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Сергей Иванов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 22</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 60%</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/38/80.png" alt="Салават Юлаев" class="team-logo" onclick="toggleStats('salavat-yulaev')">
+          <div class="team-stats" id="salavat-yulaev">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Алексей Калинин</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Игорь Беляев</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Сергей Иванов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 22</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 60%</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/29/80.png" alt="Сибирь" class="team-logo" onclick="toggleStats('sibir')">
+          <div class="team-stats" id="sibir">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Алексей Калинин</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Игорь Беляев</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Сергей Иванов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 22</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 60%</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/190/80.png" alt="Автомобилист" class="team-logo" onclick="toggleStats('avtomobilist')">
+          <div class="team-stats" id="avtomobilist">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Алексей Калинин</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Игорь Беляев</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Сергей Иванов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 22</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 60%</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/25/80.png" alt="Трактор" class="team-logo" onclick="toggleStats('tracktor')">
+          <div class="team-stats" id="tracktor">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Алексей Калинин</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Игорь Беляев</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Сергей Иванов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 22</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 60%</div>
+          </div>
+        </div>
+        <div class="team-card">
+          <img src="//img.khl.ru/teams/ru/1288/53/80.png" alt="Ак Барс" class="team-logo" onclick="toggleStats('akbars')">
+          <div class="team-stats" id="akbars">
+            <div class="stats-item"><strong>Лучший снайпер:</strong> Алексей Калинин</div>
+            <div class="stats-item"><strong>Лучший бомбардир:</strong> Игорь Беляев</div>
+            <div class="stats-item"><strong>Лучший ассистент:</strong> Сергей Иванов</div>
+            <div class="stats-item"><strong>Штрафные минуты:</strong> 22</div>
+            <div class="stats-item"><strong>Процент выигрышей:</strong> 60%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleStats(teamId) {
+      const statsElement = document.getElementById(teamId);
+      statsElement.classList.toggle('show');
+    }
+  </script>
+ </div>
+</body>
+</html>
