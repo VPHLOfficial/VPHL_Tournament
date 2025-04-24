@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Турнирная таблица VPHL</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .main-container {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .league-logo {
+      height: 70px;
+      margin-right: 20px;
+    }
+    .conference-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+    .conference-header {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      background: linear-gradient(90deg, #000000 0%, #333333 100%);
+      color: white;
+    }
+    .conference-logo {
+      width: 50px;
+      height: 50px;
+      margin-right: 15px;
+      filter: brightness(0) invert(1);
+    }
+    .conference-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    .table-expanded {
+      font-size: 1.1rem;
+    }
+    .table-expanded th,
+    .table-expanded td {
+      padding: 12px 15px;
+      vertical-align: middle;
+    }
+    .club-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .club-logo {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+    }
+    .club-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+    .points-cell {
+      font-weight: 700;
+      color: #000000;
+      font-size: 1.2rem;
+    }
+    .goals-for {
+      color: #28a745; /* Зеленый для забитых */
+    }
+    .goals-against {
+      color: #dc3545; /* Красный для пропущенных */
+    }
+    .glossary-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      padding: 25px;
+      margin-top: 30px;
+    }
+    .glossary-title {
+      font-size: 1.5rem;
+      color: #000000;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #eee;
+    }
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .glossary-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .glossary-abbr {
+      font-weight: 700;
+      min-width: 40px;
+      color: #000000;
+      font-size: 1.2rem;
+    }
+    .nav-pills .nav-link.active {
+      background-color: #000000;
+    }
+    .nav-link {
+      color: #000000;
+    }
+    @media (max-width: 992px) {
+      .table-expanded {
+        font-size: 1rem;
+      }
+      .club-logo {
+        width: 38px;
+        height: 38px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <h1>ААААААААААААААААААА - {{length}}</h1>
+ <div class="main-container">
+    <header class="d-flex justify-content-between align-items-center mb-5">
+        <div class="d-flex align-items-center">
+            <img src="https://i.postimg.cc/XNyR6YWb/6224a380-8bca-41dc-96b5-ce8c7ab39716.jpg"
+                 alt="Логотип лиги" class="league-logo">
+            <h1 class="h3 mb-0">Турнирная таблица VPHL</h1>
+        </div>
+        <nav class="nav nav-pills">
+          <a class="nav-link active" href="{{ url_for('standings') }}">Таблица</a>
+          <a class="nav-link" href="{{ url_for('statistics') }}">Статистика</a>
+          <a class="nav-link" href="{{ url_for('records') }}">Рекорды</a>
+
+        </nav>
+    </header>
+
+    <div class="row">
+      <!-- Западная конференция -->
+      <div class="col-lg-6 mb-5">
+        <div class="conference-card">
+          <div class="conference-header">
+            <img src="https://i.postimg.cc/4xg55033/Screenshot-167.png" alt="Логотип лиги" class="league-logo">
+            <h2 class="conference-title">Западная конференция</h2>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-expanded table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Команда</th>
+                  <th>И</th>
+                  <th>В</th>
+                  <th>ВО</th>
+                  <th>ПО</th>
+                  <th>П</th>
+                  <th>ШЗ</th>
+                  <th>ШП</th>
+                  <th>О</th>
+                </tr>
+              </thead>
+              <tbody>
+   {% for team in teams %}
+  <tr>
+    <td>1</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/56/80.png" alt="Северсталь" class="club-logo">
+      <span class="club-name">{{team["name"]}}</span>
+    </td>
+    <td>{{team["games"]}}</td>
+    <td>{{team["wins"]}}</td>
+    <td>{{team["overtime_wins"]}}</td>
+    <td>{{team["overtime_losses"]}}</td>
+    <td>{{team["losses"]}}</td>
+    <td>{{team["goals_for"]}}</td>
+    <td>{{team["goals_against"]}}</td>
+    <td>{{team["points"]}}</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/207/80.png" alt="Динамо Минск" class="club-logo">
+      <span class="club-name">{{team["name"]}}</span>
+    </td>
+    <td>{{team["games"]}}</td>
+    <td>{{team["wins"]}}</td>
+    <td>{{team["overtime_wins"]}}</td>
+    <td>{{team["overtime_losses"]}}</td>
+    <td>{{team["losses"]}}</td>
+    <td>{{team["goals_for"]}}</td>
+    <td>{{team["goals_against"]}}</td>
+    <td>{{team["points"]}}</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/7/80.png" alt="Спартак" class="club-logo">
+      <span class="club-name">{{team["name"]}}</span>
+    </td>
+    <td>{{team["games"]}}</td>
+    <td>{{team["wins"]}}</td>
+    <td>{{team["overtime_wins"]}}</td>
+    <td>{{team["overtime_losses"]}}</td>
+    <td>{{team["losses"]}}</td>
+    <td>{{team["goals_for"]}}</td>
+    <td>{{team["goals_against"]}}</td>
+    <td>{{team["points"]}}</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/719/80.png" alt="Динамо М" class="club-logo">
+      <span class="club-name">{{team["name"]}}</span>
+    </td>
+    <td>{{team["games"]}}</td>
+    <td>{{team["wins"]}}</td>
+    <td>{{team["overtime_wins"]}}</td>
+    <td>{{team["overtime_losses"]}}</td>
+    <td>{{team["losses"]}}</td>
+    <td>{{team["goals_for"]}}</td>
+    <td>{{team["goals_against"]}}</td>
+    <td>{{team["points"]}}</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/37/80.png" alt="Металлург" class="club-logo">
+      <span class="club-name">{{team["name"]}}</span>
+    </td>
+    <td>{{team["games"]}}</td>
+    <td>{{team["wins"]}}</td>
+    <td>{{team["overtime_wins"]}}</td>
+    <td>{{team["overtime_losses"]}}</td>
+    <td>{{team["losses"]}}</td>
+    <td>{{team["goals_for"]}}</td>
+    <td>{{team["goals_against"]}}</td>
+    <td>{{team["points"]}}</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/1/80.png" alt="Локомотив" class="club-logo">
+      <span class="club-name">{{team["name"]}}</span>
+    </td>
+    <td>{{team["games"]}}</td>
+    <td>{{team["wins"]}}</td>
+    <td>{{team["overtime_wins"]}}</td>
+    <td>{{team["overtime_losses"]}}</td>
+    <td>{{team["losses"]}}</td>
+    <td>{{team["goals_for"]}}</td>
+    <td>{{team["goals_against"]}}</td>
+    <td>{{team["points"]}}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Восточная конференция -->
+      <div class="col-lg-6 mb-5">
+        <div class="conference-card">
+          <div class="conference-header">
+            <img src="https://i.postimg.cc/4xg55033/Screenshot-167.png" alt="Логотип лиги" class="league-logo">
+
+            <h2 class="conference-title">Восточная конференция</h2>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-expanded table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Команда</th>
+                  <th>И</th>
+                  <th>В</th>
+                  <th>ВО</th>
+                  <th>ПО</th>
+                  <th>П</th>
+                  <th>ШЗ</th>
+                  <th>ШП</th>
+                  <th>О</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+    <td>7</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/38/80.png" alt="Салават Юлаев" class="club-logo">
+      <span class="club-name">Салават Юлаев</span>
+    </td>
+    <td>5</td>
+    <td>3</td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td class="goals-for">11</td>
+    <td class="goals-against">2</td>
+    <td class="points-cell">9</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/34/80.png" alt="Авангард" class="club-logo">
+      <span class="club-name">Авангард</span>
+    </td>
+    <td>6</td>
+    <td>2</td>
+    <td>2</td>
+    <td>0</td>
+    <td>2</td>
+    <td class="goals-for">8</td>
+    <td class="goals-against">6</td>
+    <td class="points-cell">7</td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/29/80.png" alt="Сибирь" class="club-logo">
+      <span class="club-name">Сибирь</span>
+    </td>
+    <td>6</td>
+    <td>3</td>
+    <td>0</td>
+    <td>1</td>
+    <td>1</td>
+    <td class="goals-for">18</td>
+    <td class="goals-against">6</td>
+    <td class="points-cell">7</td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/190/80.png" alt="Автомобилист" class="club-logo">
+      <span class="club-name">Автомобилист</span>
+    </td>
+    <td>7</td>
+    <td>3</td>
+    <td>0</td>
+    <td>1</td>
+    <td>3</td>
+    <td class="goals-for">8</td>
+    <td class="goals-against">11</td>
+    <td class="points-cell">7</td>
+  </tr>
+  <tr>
+    <td>11</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/25/80.png" alt="Трактор" class="club-logo">
+      <span class="club-name">Трактор</span>
+    </td>
+    <td>5</td>
+    <td>2</td>
+    <td>0</td>
+    <td>0</td>
+    <td>3</td>
+    <td class="goals-for">10</td>
+    <td class="goals-against">11</td>
+    <td class="points-cell">4</td>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td class="club-cell">
+      <img src="//img.khl.ru/teams/ru/1288/53/80.png" alt="Ак Барс" class="club-logo">
+      <span class="club-name">Ак Барс</span>
+    </td>
+    <td>4</td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>2</td>
+    <td class="goals-for">8</td>
+    <td class="goals-against">9</td>
+    <td class="points-cell">4</td>
+  </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Форма добавления матча для админа -->
+{% if session.get('logged_in') %}
+<div class="add-match-form card mt-4">
+  <div class="card-body">
+    <h3 class="card-title">Добавить матч</h3>
+    <form action="{{ url_for('add_match') }}" method="POST">
+      <div class="mb-3">
+        <label for="team1" class="form-label">Команда 1</label>
+        <input type="text" class="form-control" id="team1" name="team1" required>
+      </div>
+      <div class="mb-3">
+        <label for="team2" class="form-label">Команда 2</label>
+        <input type="text" class="form-control" id="team2" name="team2" required>
+      </div>
+      <div class="mb-3">
+        <label for="score1" class="form-label">Результат (Команда 1)</label>
+        <input type="number" class="form-control" id="score1" name="score1" required>
+      </div>
+      <div class="mb-3">
+        <label for="score2" class="form-label">Результат (Команда 2)</label>
+        <input type="number" class="form-control" id="score2" name="score2" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Добавить матч</button>
+    </form>
+  </div>
+</div>
+{% else %}
+<p>Пожалуйста, <a href="{{ url_for('login') }}">войдите</a>, чтобы добавить результаты матчей.</p>
+{% endif %}
+
+<!-- Глоссарий -->
+<div class="glossary-card">
+  <h3 class="glossary-title">Глоссарий</h3>
+  <div class="glossary-grid">
+    <div class="glossary-item">
+      <span class="glossary-abbr">И</span>
+      <span>Количество проведенных игр</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-abbr">В</span>
+      <span>Победы в основное время (2 очка)</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-abbr">ВО</span>
+      <span>Победы в овертайме (2 очка)</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-abbr">ВБ</span>
+      <span>Победы по буллитам (2 очка)</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-abbr">ПО</span>
+      <span>Поражения в овертайме (1 очко)</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-abbr">ПБ</span>
+      <span>Поражения по буллитам (1 очко)</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-abbr">П</span>
+      <span>Поражения в основное время (0 очков)</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-abbr">ШЗ</span>
+      <span>Шайбы забитые</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-abbr">ШП</span>
+      <span>Шайбы пропущенные</span>
+    </div>
+    <div class="glossary-item">
+      <span class="glossary-abbr">О</span>
+      <span>Общее количество очков</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
