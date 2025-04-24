@@ -6,14 +6,14 @@ app.secret_key = 'your_secret_key'  # Это нужно для работы с �
 
 # Функция для подключения к базе данных
 def get_db_connection():
-    conn = sqlite3.connect('mysite/tournament.db')
+    conn = sqlite3.connect('tournament.db')
     conn.row_factory = sqlite3.Row  # Чтобы можно было обращаться к строкам как к словарям
     return conn
 
 @app.route('/')
 def standings():
     conn = get_db_connection()
-    teams = conn.execute('SELECT * FROM teams ORDER BY points DESC, (goals_for - goals_against) DESC').fetchall()
+    teams = conn.execute('SELECT * FROM teams').fetchall()
     conn.close()
 
     return render_template('standings.html', teams=teams, length=len(teams))
@@ -59,7 +59,7 @@ def add_match():
             conn.commit()
 
             # Пересортировать команды по очкам и разнице голов
-            teams = conn.execute('SELECT * FROM teams ORDER BY points DESC, (goals_for - goals_against) DESC').fetchall()
+            teams = conn.execute('SELECT * FROM teams').fetchall()
 
             # Обновляем ранг команд
             for idx, team in enumerate(teams):
